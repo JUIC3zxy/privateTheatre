@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 
-const socket = io(process.env.SERVER_URL);
+const socket = io(process.env.REACT_APP_SERVER_URL);
 
 const MoviePlayer = () => {
   const videoRef = useRef(null);
@@ -108,7 +108,7 @@ const MoviePlayer = () => {
             <video
               ref={videoRef}
               controls
-              src={process.env.MEDIA_URL}
+              src={process.env.REACT_APP_MEDIA_URL}
               style={{ width: "100%", borderRadius: "10px" }}
             />
           </div>
