@@ -4,18 +4,21 @@ import http from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 
+require("dotenv").config(); // Load .env variables
 const app = express();
 const server = http.createServer(app);
+const PORT = process.env.PORT || 3003;
+const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Your frontend's address
+    origin: frontendUrl, // Your frontend's address
     methods: ["GET", "POST"],
   },
 });
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // Your frontend URL
+    origin: frontendUrl, // Your frontend URL
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -31,8 +34,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("pause", (time) => {
-
-    socket.broadcast.emit("pause",time);
+    socket.broadcast.emit("pause", time);
   });
 
   socket.on("disconnect", () => {

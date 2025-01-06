@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 
-const socket = io("http://localhost:3003");
+const socket = io(process.env.SERVER_URL);
 
 const MoviePlayer = () => {
   const videoRef = useRef(null);
@@ -107,8 +107,8 @@ const MoviePlayer = () => {
           <div className="video-container mb-3">
             <video
               ref={videoRef}
-              src="https://pan.mdsub.top/api/raw?path=/%E5%B8%83%E6%8B%89%E5%BE%B7%E5%B0%BC%E5%88%A9%E7%A5%9E%E7%BB%8F%E7%A7%80/%E5%B8%83%E6%8B%89%E5%BE%B7%E5%B0%BC%E5%88%A9%E7%A5%9E%E7%BB%8F%E7%A7%80.Brad.Neelys.Harg.Nallin.Sclopio.Peepio.S01E01.WEB-720p.1280X720.%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD-%E7%94%B5%E6%B3%A2%E5%AD%97%E5%B9%95%E7%BB%84.mp4"
               controls
+              src={process.env.MEDIA_URL}
               style={{ width: "100%", borderRadius: "10px" }}
             />
           </div>
