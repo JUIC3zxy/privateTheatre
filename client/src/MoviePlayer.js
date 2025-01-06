@@ -9,7 +9,8 @@ const socket = io(process.env.REACT_APP_SERVER_URL);
 const MoviePlayer = () => {
   const videoRef = useRef(null);
   const [playing, setPlaying] = useState(false);
-  const [handleStart, setHandleStart] = useState(false);
+  const[seeking,setSeeking]=useState(false)
+    const [handleStart, setHandleStart] = useState(false);
 
   const handlePlay = () => {
     if (videoRef.current) {
@@ -21,7 +22,7 @@ const MoviePlayer = () => {
   };
 
   const handlePause = () => {
-    if (videoRef.current) {
+    if (videoRef.current && playing) {
       const currentTime = videoRef.current.currentTime;
       setPlaying(false);
       console.log(`vedio is paused from ${currentTime}`);
@@ -29,10 +30,18 @@ const MoviePlayer = () => {
     }
   };
 
-  const handleSeek = () => {
-    if (videoRef.current) {
+  const handleSeeking = () => {
+    if (videoRef.current && seeking) {
       const currentTime = videoRef.current.currentTime;
-      console.log(`vedio is playing from ${currentTime}`);
+      setPlaying(false);
+      videoRef.current.pause(); // Play the video
+      socket.emit("pause", currentTime);
+    }
+  };
+  const handleSeeked = () => {
+    if (videoRef.current && playing===false) {
+      setPlaying(true);
+
     }
   };
 
@@ -61,7 +70,8 @@ const MoviePlayer = () => {
         console.log("Video element found, adding event listeners");
         videoElement.addEventListener("play", handlePlay);
         videoElement.addEventListener("pause", handlePause);
-        videoElement.addEventListener("seeked", handleSeek);
+        videoElement.addEventListener("seeked", handleSeeked);
+        videoElement.addEventListener("seeking", handleSeeking);
       } else {
         console.log("vedio element is null!");
       }
@@ -75,10 +85,12 @@ const MoviePlayer = () => {
       // Clean up event listeners
       socket.off("play");
       socket.off("pause");
+
       if (videoRef.current) {
         videoRef.current.removeEventListener("play", handlePlay);
         videoRef.current.removeEventListener("pause", handlePause);
-        videoRef.current.removeEventListener("seeked", handleSeek);
+        videoRef.current.removeEventListener("seeked", handleSeeked);
+        videoRef.current.removeEventListener("seeking", handleSeeking);
         videoRef.current.removeEventListener(
           "loadedmetadata",
           addEventListeners
