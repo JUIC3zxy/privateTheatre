@@ -31,7 +31,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("pause", (time) => {
-    console.log("pause event received");
+
     socket.broadcast.emit("pause",time);
   });
 
